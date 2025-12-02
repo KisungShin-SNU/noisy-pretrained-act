@@ -16,6 +16,7 @@ plt.figure(figsize=(8, 4))
 # 1~3번째 bar: 단색
 colors = ['green', 'red', 'blue']
 colors = ["#C5E0B4", "#F8CBCD", "#BDD7EE"]
+colors = ["#C5E0B4", "#BFBFBF", "#000000"]
 
 for i in range(3):
     plt.barh(i, values[i], color=colors[i])
@@ -26,6 +27,7 @@ value = values[3]
 
 # 그라데이션용 colormap
 cmap = LinearSegmentedColormap.from_list("red_blue_grad", ["#BDD7EE", "#DBD1CE", "#F8CBCD"])
+cmap = LinearSegmentedColormap.from_list("red_blue_grad", ["#000000", "#DBD1CE", "#BFBFBF"])
 
 # 그라데이션 데이터 (세로 방향)
 grad = np.linspace(0, 1, 256).reshape(256, 1)
