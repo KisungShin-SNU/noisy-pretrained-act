@@ -1,4 +1,52 @@
 # Improving Robot Imitation Learning with Noise-Pretrained Transformers
+## 2026.03.30.
+- TITAN xp server (same)
+- mkdir bef_260330
+
+```
+cd noisy-pretrained-act
+conda activate np4a
+export MUJOCO_GL=egl
+
+# dataset gen
+## original dataset
+cp -r sim_transfer_cube_human
+## small noisy action
+python record_sim_episodes.py --task_name sim_transfer_cube_small_noisy_scripted --num_episodes 50
+## noisy image
+python overwrite_img_with_noise.py --target_dataset_folder /sim_transfer_cube_human
+## small noisy action and noisy image: overwrite image in small noisy action data.
+python overwrite_img_with_noise.py --target_dataset_folder /sim_transfer_cube_small_noisy_scripted
+
+# check files
+## original dataset (already done)
+python visualize_episodes.py --dataset_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/sim_transfer_cube_human --episode_idx all
+## small noisy action
+python visualize_episodes.py --dataset_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/sim_transfer_cube_human_noisy_img --episode_idx all
+## noisy image
+python visualize_episodes.py --dataset_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/sim_transfer_cube_small_noisy_scripted --episode_idx all
+## small noisy action and noisy image
+python visualize_episodes.py --dataset_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/sim_transfer_cube_small_noisy_scripted_noisy_img --episode_idx all
+
+# training
+### [노이즈 행동 + 이미지] 사전학습
+#### set wandb project name as np4a_small_noisy_action in imitate_episodes.py
+CUDA_VISIBLE_DEVICES=0 python imitate_episodes.py --task_name sim_transfer_cube_small_noisy_scripted --ckpt_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_small_noisy_scripted_0 --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5 --seed 0
+CUDA_VISIBLE_DEVICES=0 python imitate_episodes.py --task_name sim_transfer_cube_human --ckpt_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_human_smallnoisyact_post_0 --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5 --seed 0 --path2ckpt /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_small_noisy_scripted_0/policy_last.ckpt
+
+### [노이즈 행동 + 노이즈 이미지] 사전학습
+#### set wandb project name as np4a_small_noisy_action_image in imitate_episodes.py
+CUDA_VISIBLE_DEVICES=0 python imitate_episodes.py --task_name sim_transfer_cube_small_noisy_scripted --ckpt_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_small_noisy_scripted_0 --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5 --seed 0 --noisy_img True
+CUDA_VISIBLE_DEVICES=0 python imitate_episodes.py --task_name sim_transfer_cube_human --ckpt_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_human_smallnoisyactimg_post_0 --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5 --seed 0 --path2ckpt /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_small_noisy_scripted_0_noisy_img/policy_last.ckpt
+
+# eval
+## wandb project name=np4a_eval_for_small
+## num_rollouts=50
+CUDA_VISIBLE_DEVICES=0 python imitate_episodes_eval.py --task_name sim_transfer_cube_human --ckpt_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_human_smallnoisyact_post_0_finetune --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5 --seed 0 --eval
+
+CUDA_VISIBLE_DEVICES=0 python imitate_episodes_eval.py --task_name sim_transfer_cube_human --ckpt_dir /media/bi_admin/4tb_hdd/data/noisy-pretrained-act/ckpt/sim_transfer_cube_human_smallnoisyactimg_post_0_finetune --policy_class ACT --kl_weight 10 --chunk_size 100 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_epochs 2000 --lr 1e-5 --seed 0 --eval
+```
+
 ## 2025.11.25. memo for KTCP
 - KCC 제출 버전의 ckpt에 대한 분석 추가(bi-stealth 4tb hdd의 data/archive에서 찾음)
 - 당시 코드는 github 250513_overflow 커밋 또는 그 이전임(5월7일 제출)

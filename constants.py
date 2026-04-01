@@ -38,6 +38,13 @@ SIM_TASK_CONFIGS = {
         'camera_names': ['top']
     },
 
+    'sim_transfer_cube_small_noisy_scripted':{
+        'dataset_dir': DATA_DIR + '/sim_transfer_cube_small_noisy_scripted',
+        'num_episodes': 50,
+        'episode_len': 400,
+        'camera_names': ['top']
+    },
+
     'sim_insertion_noisy_scripted':{
         'dataset_dir': DATA_DIR + '/sim_insertion_noisy_scripted',
         'num_episodes': 50,
