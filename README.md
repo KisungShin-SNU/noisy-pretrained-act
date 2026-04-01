@@ -2,7 +2,19 @@
 ## 2026.03.30.
 - TITAN xp server (same)
 - mkdir bef_260330
+```
+check
+constants.py
+record_sim_episodes.py
+scripted_policy.py
+overwrite_img_with_noise.py
+imitate_episodes.py
+fig.py -> fig_kiise.py -> fig_ktcp.py
+compare_w.py
+std_bar.py
 
+and .sh
+```
 ```
 cd noisy-pretrained-act
 conda activate np4a

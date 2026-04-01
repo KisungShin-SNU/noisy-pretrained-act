@@ -4,13 +4,24 @@ import matplotlib.pyplot as plt
 # 글꼴 설정: Times New Roman
 plt.rcParams['font.family'] = 'Times New Roman'
 
-value_list = []
-value_list.extend([np.float32(0.00), np.float32(0.025565192), np.float32(0.023824966)])
-value_list.extend([np.float32(0.025564754), np.float32(0.024064895), np.float32(0.0228798)])
-value_list.extend([np.float32(0.025564628), np.float32(0.02464119), np.float32(0.023304267)])
-value_list.extend([np.float32(0.025564525), np.float32(0.024696685), np.float32(0.023217488)])
+plt.rcParams.update({
+    'font.size': 12,        # 기본 글자 크기
+    'axes.titlesize': 16,   # 제목
+    'axes.labelsize': 14,   # x, y 라벨
+    'xtick.labelsize': 12,  # x축 눈금
+    'ytick.labelsize': 12,  # y축 눈금
+    'legend.fontsize': 12   # 범례
+})
 
-colors = ["#1f77b4", "#ff7f0e", "#2ca02c"]
+value_list = []
+value_list.extend([np.float32(0.00), np.float32(0.025565192), np.float32(0.023824966)]) #baseline
+value_list.extend([np.float32(0.025564754), np.float32(0.024064895), np.float32(0.0228798)]) #noise image
+value_list.extend([np.float32(0.025564628), np.float32(0.024583546), np.float32(0.023242576)]) #small noisy action
+value_list.extend([np.float32(0.025564628), np.float32(0.02464119), np.float32(0.023304267)]) #noisy action
+value_list.extend([np.float32(0.025564931), np.float32(0.024676502), np.float32(0.023264376)]) #noisy image + small noisy action
+value_list.extend([np.float32(0.025564525), np.float32(0.024696685), np.float32(0.023217488)]) #noisy image + noisy action
+
+colors = ["#E377C2", "#9467BD", "#8C564B"]
 
 # ===== 그룹 설정 =====
 group_size = 3
@@ -31,7 +42,14 @@ for g in range(num_groups):
 bar_colors = [colors[i % group_size] for i in range(len(value_list))]
 
 # 그룹 라벨
-group_labels = ["Baseline", "Noisy image pretraining\n+ post-training", "Noisy action pretraining\n+ post-training", "Noisy image\n& Noisy action pretraining\n+ post-training"]
+group_labels = [
+    "Baseline", 
+    "Image", 
+    "Action (small)", 
+    "Action", 
+    "Image & \nAction (small)",
+    "Image & \nAction"
+]
 
 group_positions = []
 pos = 0
@@ -71,5 +89,5 @@ ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 
 plt.tight_layout()
-plt.savefig('std_bar.png')
+plt.savefig('std_bar_ktcp.png')
 plt.close()
