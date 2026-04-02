@@ -6,11 +6,11 @@ plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['font.size'] = 15
 
 plt.rcParams.update({
-    'font.size': 12,        # 기본 글자 크기
-    'axes.titlesize': 16,   # 제목
-    'axes.labelsize': 14,   # x, y 라벨
-    'xtick.labelsize': 12,  # x축 눈금
-    'ytick.labelsize': 12,  # y축 눈금
+    'font.size': 15,        # 기본 글자 크기
+    'axes.titlesize': 15,   # 제목
+    'axes.labelsize': 15,   # x, y 라벨
+    'xtick.labelsize': 15,  # x축 눈금
+    'ytick.labelsize': 15,  # y축 눈금
     'legend.fontsize': 12   # 범례
 })
 
@@ -136,7 +136,7 @@ for w_name in common_keys:
     all_max = max(arr.max() for arr in tensors)
 
     # ----- (1) 히스토그램: 한 그래프에 여러 히스토그램을 겹쳐 그리기 -----
-    fig, ax = plt.subplots(figsize=(8, 4))
+    fig, ax = plt.subplots(figsize=(9, 3))
 
     num_bins = 100
     for i, arr in enumerate(tensors):

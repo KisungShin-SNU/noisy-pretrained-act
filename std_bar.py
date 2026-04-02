@@ -67,7 +67,7 @@ bar_labels = [
 
 # ===== Plot =====
 plt.figure(figsize=(7, 5))
-bars = plt.bar(x, value_list, color=bar_colors, alpha=0.4)
+bars = plt.bar(x, value_list, color=bar_colors, alpha=0.6)
 
 # bar 위 텍스트 라벨
 for i, (rect, val) in enumerate(zip(bars, value_list)):
@@ -75,11 +75,11 @@ for i, (rect, val) in enumerate(zip(bars, value_list)):
 
 # ===== Legend 추가 =====
 from matplotlib.patches import Patch
-legend_handles = [Patch(facecolor=colors[i], label=bar_labels[i], alpha=0.4) for i in range(3)]
+legend_handles = [Patch(facecolor=colors[i], label=bar_labels[i], alpha=0.6) for i in range(3)]
 plt.legend(handles=legend_handles, loc='upper right')
 
 plt.xticks(group_positions, group_labels)
-plt.xlabel("Learning strategy")
+#plt.xlabel("Pretraining strategy")
 plt.ylabel("Std of action-head layer weights")
 plt.title("Changes in weight distributions before and after training")
 plt.ylim(0.0, 0.035)
